@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 01:05:39 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/16 23:19:16 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/16 23:57:03 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ long long	instant(void)
 void		print(t_data *rules, int id, char *string)
 {
 	pthread_mutex_lock(&(rules->print));
-	if (string)
 	if (!rules->nb_dead)
 	{
 		printf("%lld %d %s\n", instant() - rules->time_start, id, string);
@@ -180,6 +179,8 @@ int init(t_data *data, char ** argv)
 	data->forks = malloc(sizeof(int) * (ft_atoi(argv[1]) + 1));
 	data->philosophers = malloc(sizeof(t_philosopher) * (ft_atoi(argv[1]) + 2));
 	data->fork = malloc(sizeof(pthread_mutex_t) * (ft_atoi(argv[1]) + 2));
+	memset(data->philosophers, 0, sizeof(t_philosopher));
+	memset(data->fork, 0, sizeof(pthread_mutex_t));
 	data->dead = 0;
 	data->nb_dead = 0;
 	data->time_start = instant();
@@ -204,13 +205,16 @@ void	exit_launcher(t_data *rules, t_philosopher *philos)
 {
 	unsigned int	i;
 
-	i = -1;
-	while (++i < rules->nb_philo)
+	i = 0;
+	while (i++ < rules->nb_philo - 1)
 		pthread_join(philos[i].thread_id, NULL);
-	i = -1;
-	while (++i < rules->nb_philo)
+	i = 0;
+	while (i++ < rules->nb_philo - 1)
 		pthread_mutex_destroy(&(rules->fork[i]));
 	pthread_mutex_destroy(&(rules->print));
+	free(rules->forks);
+	free(rules->fork);
+	free(rules->philosophers);
 }
 
 int	main(int argc, char **argv)
