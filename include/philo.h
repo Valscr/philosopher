@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:58:42 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/17 17:53:56 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/19 00:04:09 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ typedef struct s_data
 }	t_data;
 
 void	*thread_routine(void *void_philosopher);
-int init(t_data *data, char ** argv);
+int init(t_data *data, char ** argv, int argc);
 
 #endif
