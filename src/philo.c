@@ -6,11 +6,11 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 01:05:39 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/16 23:57:03 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/18 20:13:22 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo.h>
+#include "../include/philo.h"
 
 long long	instant(void)
 {
@@ -91,15 +91,21 @@ void	*thread_routine(void *void_philosopher)
 					return (NULL);
 				print(rules, philo->id, "is sleeping");
 				smart_sleep(rules->time_sleep , rules, philo);
+				if (rules->dead == 1)
+					return (NULL);
 				print(rules, philo->id, "is thinking");
 			}
 		}
 		else if (philo->id == rules->nb_philo)
 		{	
+			if (rules->dead == 1)
+					return (NULL);
 			if (rules->time_eat - (instant() - rules->forks[philo->id]) > 0)
 				smart_sleep(rules->time_eat - (instant() - rules->forks[philo->id]), rules, philo);
 			if (rules->time_eat - (instant() - rules->forks[1]) > 0)
 				smart_sleep(rules->time_eat - (instant() - rules->forks[1]), rules, philo);
+			if (rules->dead == 1)
+					return (NULL);
 			pthread_mutex_lock(&(rules->fork[philo->id]));
 			print(rules, philo->id, "has taken left fork");
 			pthread_mutex_lock(&(rules->fork[1]));
@@ -118,6 +124,8 @@ void	*thread_routine(void *void_philosopher)
 				return (NULL);
 			print(rules, philo->id, "is sleeping");
 			smart_sleep(rules->time_sleep, rules, philo);
+			if (rules->dead == 1)
+					return (NULL);
 			print(rules, philo->id, "is thinking");
 		}
 		else
@@ -132,6 +140,8 @@ void	*thread_routine(void *void_philosopher)
 				smart_sleep(rules->time_eat - (instant() - rules->forks[philo->id]), rules, philo);
 			if (rules->time_eat - (instant() - rules->forks[philo->id + 1]) > 0)
 				smart_sleep(rules->time_eat - (instant() - rules->forks[philo->id + 1]), rules, philo);
+			if (rules->dead == 1)
+					return (NULL);
 			pthread_mutex_lock(&(rules->fork[philo->id]));
 			print(rules, philo->id, "has taken left fork");
 			pthread_mutex_lock(&(rules->fork[philo->id + 1]));
@@ -150,6 +160,8 @@ void	*thread_routine(void *void_philosopher)
 				return (NULL);
 			print(rules, philo->id, "is sleeping");
 			smart_sleep(rules->time_sleep, rules, philo);
+			if (rules->dead == 1)
+					return (NULL);
 			print(rules, philo->id, "is thinking");
 		}
 	i++;
@@ -162,7 +174,7 @@ int	init_mutex(t_data *rules)
 	int	i;
 
 	i = rules->nb_philo + 1;
-	while (--i >= 0)
+	while (--i > 0)
 	{
 		if (pthread_mutex_init(&(rules->fork[i]), NULL))
 			return (1);
@@ -176,11 +188,9 @@ int init(t_data *data, char ** argv)
 {
 	unsigned int	i;
 
-	data->forks = malloc(sizeof(int) * (ft_atoi(argv[1]) + 1));
+	data->forks = malloc(sizeof(long long) * (ft_atoi(argv[1]) + 2));
 	data->philosophers = malloc(sizeof(t_philosopher) * (ft_atoi(argv[1]) + 2));
 	data->fork = malloc(sizeof(pthread_mutex_t) * (ft_atoi(argv[1]) + 2));
-	memset(data->philosophers, 0, sizeof(t_philosopher));
-	memset(data->fork, 0, sizeof(pthread_mutex_t));
 	data->dead = 0;
 	data->nb_dead = 0;
 	data->time_start = instant();
@@ -206,10 +216,10 @@ void	exit_launcher(t_data *rules, t_philosopher *philos)
 	unsigned int	i;
 
 	i = 0;
-	while (i++ < rules->nb_philo - 1)
+	while (i++ < rules->nb_philo)
 		pthread_join(philos[i].thread_id, NULL);
 	i = 0;
-	while (i++ < rules->nb_philo - 1)
+	while (i++ < rules->nb_philo)
 		pthread_mutex_destroy(&(rules->fork[i]));
 	pthread_mutex_destroy(&(rules->print));
 	free(rules->forks);
@@ -233,7 +243,6 @@ int	main(int argc, char **argv)
 	{
 		if (pthread_create(&(philo[i].thread_id), NULL, thread_routine, &(philo[i])))
 			return (1);
-		/*phi[i].t_last_meal = timestamp();*/
 		i++;
 	}
 	exit_launcher(&data, philo);

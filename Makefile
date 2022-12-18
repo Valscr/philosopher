@@ -6,7 +6,7 @@
 #    By: valentin <valentin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/15 17:29:07 by valentin          #+#    #+#              #
-#    Updated: 2022/12/15 17:31:54 by valentin         ###   ########.fr        #
+#    Updated: 2022/12/17 17:34:11 by valentin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ INCS	= -I ./include/
 
 OBJS = ${C_FILES:%.c=$(DIR_OBJ)%.o}
 
-CFLAGS += -Wall -Wextra -Werror
+CFLAGS += -pthread -Wall -Wextra -Werror
 
 LIBSFLAGS	=  libft/libft.a
 
