@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 02:17:16 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 02:24:08 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/19 05:12:41 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,12 @@
 
 int	diner(t_data *rules, t_philosopher *philo, int philo1, int philo2)
 {
-	if (philo->mutex_autorise > 0)
-	{
-		if (!check_mutex(rules, philo))
-			return (0);
-	}
+	if (!check_mutex(rules, philo, philo1, philo2))
+		return (0);
 	pthread_mutex_lock(&(rules->fork[philo1]));
-	print(rules, philo1, "has taken left fork");
+	print(rules, philo1, "has taken a fork");
 	pthread_mutex_lock(&(rules->fork[philo2]));
-	print(rules, philo1, "has taken right fork");
+	print(rules, philo1, "has taken a fork");
 	print(rules, philo1, "is eating");
 	rules->forks[philo1] = instant();
 	rules->forks[philo2] = instant();
@@ -46,13 +43,14 @@ int	pthread_run(t_data *rules, t_philosopher *philo, unsigned int i)
 	while (1)
 	{
 		if (i == 0)
-		{		
-			if (philo->id == 1 || philo->id % 2 == 1)
+		{
+			if (philo->id == 1 || (philo->id % 2 == 1))
 			{
 				if (!diner(rules, philo, philo->id, philo->id + 1))
 					return (0);
 			}
-			philo->mutex_autorise++;
+			else
+				smart_sleep(rules->time_eat, rules, philo);
 		}
 		else if (philo->id == rules->nb_philo)
 		{

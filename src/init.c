@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 02:15:43 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 02:31:59 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/19 04:08:01 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_bis(t_data *data, char **argv, int argc)
 	i = data->nb_philo + 1;
 	while (--i > 0)
 	{
-		data->forks[i] = instant();
+		data->forks[i] = 0;
 		data->philosophers[i].id = i;
 		data->philosophers[i].rules = data;
 		data->philosophers[i].last_eat = instant();
@@ -78,7 +78,8 @@ int	check_arg(char **argv)
 	while (argv[y])
 	{
 		i = 0;
-		if (!ft_isdigit(argv[y][i]) && argv[y][0] != '+')
+		if ((!ft_isdigit(argv[y][i]) && argv[y][0] != '+')
+			|| ft_atoi(argv[y]) <= 0)
 			return (0);
 		i++;
 		while (argv[y][i] != '\0')

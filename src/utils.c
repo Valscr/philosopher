@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 02:14:53 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 02:23:23 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/19 04:47:34 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,4 @@ void	smart_sleep(long long time, t_data *rules, t_philosopher *philo)
 			break ;
 		usleep(50);
 	}
-}
-
-int	check_mutex(t_data *ru, t_philosopher *phi)
-{
-	if (ru->dead == 1)
-		return (0);
-	if (ru->time_eat - (instant() - ru->forks[phi->id]) > 0)
-		smart_sleep(ru->time_eat - (instant() - ru->forks[phi->id]), ru, phi);
-	if (ru->time_eat - (instant() - ru->forks[1]) > 0)
-		smart_sleep(ru->time_eat - (instant() - ru->forks[1]), ru, phi);
-	if (ru->dead == 1)
-		return (0);
-	return (1);
 }

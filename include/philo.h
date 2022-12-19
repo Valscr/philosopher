@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:58:42 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 02:30:25 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/19 05:06:12 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ long long	instant(void);
 void		print(t_data *rules, int id, char *string);
 long long	time_diff(long long past, long long pres);
 void		smart_sleep(long long time, t_data *rules, t_philosopher *philo);
-int			check_mutex(t_data *ru, t_philosopher *phi);
+int			check_mutex(t_data *ru, t_philosopher *phi, int philo1, int philo2);
 int			ft_isdigit(unsigned char c);
 int			ft_atoi(const char *str);
 
