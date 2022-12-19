@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 01:05:39 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 00:14:13 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/19 01:14:37 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	*pthread_(void *void_philosopher)
 	philo = (t_philosopher *)void_philosopher;
 	rules = philo->rules;
 	i = 0;
-	while (philo->nb_eat > 0)
+	while (1)
 	{
 		if (rules->dead == 1)
 			return (NULL);
@@ -85,7 +85,7 @@ void	*pthread_(void *void_philosopher)
 				philo->nb_eat--;
 				pthread_mutex_unlock(&(rules->fork[philo->id]));
 				pthread_mutex_unlock(&(rules->fork[philo->id + 1]));
-				if (rules->dead == 1)
+				if (rules->dead == 1 || philo->nb_eat <= 0)
 					return (NULL);
 				print(rules, philo->id, "is sleeping");
 				smart_sleep(rules->time_sleep, rules, philo);
@@ -116,7 +116,7 @@ void	*pthread_(void *void_philosopher)
 			philo->nb_eat--;
 			pthread_mutex_unlock(&(rules->fork[philo->id]));
 			pthread_mutex_unlock(&(rules->fork[1]));
-			if (rules->dead == 1)
+			if (rules->dead == 1 || philo->nb_eat <= 0)
 				return (NULL);
 			print(rules, philo->id, "is sleeping");
 			smart_sleep(rules->time_sleep, rules, philo);
@@ -146,7 +146,7 @@ void	*pthread_(void *void_philosopher)
 			philo->nb_eat--;
 			pthread_mutex_unlock(&(rules->fork[philo->id]));
 			pthread_mutex_unlock(&(rules->fork[philo->id + 1]));
-			if (rules->dead == 1)
+			if (rules->dead == 1 || philo->nb_eat <= 0)
 				return (NULL);
 			print(rules, philo->id, "is sleeping");
 			smart_sleep(rules->time_sleep, rules, philo);
