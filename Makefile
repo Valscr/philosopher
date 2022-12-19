@@ -6,7 +6,7 @@
 #    By: valentin <valentin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/15 17:29:07 by valentin          #+#    #+#              #
-#    Updated: 2022/12/17 17:34:11 by valentin         ###   ########.fr        #
+#    Updated: 2022/12/19 02:27:20 by valentin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = philo
 COLOUR_GREEN=\033[0;32m
 COLOUR_END=\033[0m
 
-C_FILES = philo.c
+C_FILES = philo.c init.c thread.c utils.c utils2.c
 
 SRC_DIR = ./src/
 
@@ -28,13 +28,11 @@ OBJS = ${C_FILES:%.c=$(DIR_OBJ)%.o}
 
 CFLAGS += -pthread -Wall -Wextra -Werror
 
-LIBSFLAGS	=  libft/libft.a
-
 CC		= cc
 RM		= rm -f
 
-$(NAME): ${OBJS} maker
-		@$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(LIBSFLAGS)
+$(NAME): ${OBJS}
+		@$(CC) -o $(NAME) $(OBJS) $(CFLAGS)
 		@echo " [ $(COLOUR_GREEN)OK$(COLOUR_END) ] ./philo"
 
 $(DIR_OBJ)%.o : $(SRC_DIR)%.c
@@ -43,13 +41,8 @@ $(DIR_OBJ)%.o : $(SRC_DIR)%.c
 
 all: ${NAME}
 
-maker:
-		@make -s -C libft
-		@echo "[ OK ] libft"
-
 clean:
 		@${RM} -rf ${DIR_OBJ}
-		@make fclean -s -C libft
 
 fclean:	clean
 		@${RM} ${NAME}
@@ -58,6 +51,6 @@ fclean:	clean
 re:		fclean all
 
 norm:
-	norminette $(SRC_DIR)*.c $(BONUS_DIR)*.c include/*.h 
+	norminette $(SRC_DIR)*.c include/*.h 
 
 .PHONY:         all clean fclean bonus re
