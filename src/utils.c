@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 02:14:53 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 04:47:34 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/20 17:15:50 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@ long long	instant(void)
 
 	gettimeofday(&t, NULL);
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
+}
+
+long long	instant_micro(void)
+{
+	struct timeval	t;
+
+	gettimeofday(&t, NULL);
+	return ((t.tv_sec * 1000000) + t.tv_usec);
 }
 
 void	print(t_data *rules, int id, char *string)
@@ -52,6 +60,6 @@ void	smart_sleep(long long time, t_data *rules, t_philosopher *philo)
 		}
 		if (time_diff(i, instant()) >= time)
 			break ;
-		usleep(50);
+		usleep(100);
 	}
 }

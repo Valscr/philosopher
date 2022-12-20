@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 02:17:16 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 05:12:41 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/20 17:17:16 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,42 @@
 
 int	diner(t_data *rules, t_philosopher *philo, int philo1, int philo2)
 {
-	if (!check_mutex(rules, philo, philo1, philo2))
+	if (!time_mutex(rules, philo, philo1, philo2))
 		return (0);
 	pthread_mutex_lock(&(rules->fork[philo1]));
 	print(rules, philo1, "has taken a fork");
 	pthread_mutex_lock(&(rules->fork[philo2]));
 	print(rules, philo1, "has taken a fork");
 	print(rules, philo1, "is eating");
+	philo->last_eat = instant();
 	rules->forks[philo1] = instant();
 	rules->forks[philo2] = instant();
-	philo->last_eat = instant();
 	smart_sleep(rules->time_eat, rules, philo);
 	philo->nb_eat--;
 	pthread_mutex_unlock(&(rules->fork[philo1]));
 	pthread_mutex_unlock(&(rules->fork[philo2]));
-	if (rules->dead == 1 || philo->nb_eat <= 0)
+	if (rules->dead == 1 || (rules->count && philo->nb_eat <= 0))
 		return (0);
 	print(rules, philo1, "is sleeping");
 	smart_sleep(rules->time_sleep, rules, philo);
 	if (rules->dead == 1)
 		return (0);
 	print(rules, philo1, "is thinking");
+	return (1);
+}
+
+int	pthread_run2(t_data *rules, t_philosopher *philo)
+{
+	if (philo->id == rules->nb_philo)
+	{
+		if (!diner(rules, philo, philo->id, 1))
+			return (0);
+	}
+	else
+	{
+		if (!diner(rules, philo, philo->id, philo->id + 1))
+			return (0);
+	}
 	return (1);
 }
 
@@ -46,22 +61,15 @@ int	pthread_run(t_data *rules, t_philosopher *philo, unsigned int i)
 		{
 			if (philo->id == 1 || (philo->id % 2 == 1))
 			{
-				if (!diner(rules, philo, philo->id, philo->id + 1))
+				if (!pthread_run2(rules, philo))
 					return (0);
 			}
 			else
-				smart_sleep(rules->time_eat, rules, philo);
-		}
-		else if (philo->id == rules->nb_philo)
-		{
-			if (!diner(rules, philo, philo->id, 1))
-				return (0);
+				smart_sleep(rules->time_eat - 1, rules, philo);
 		}
 		else
-		{
-			if (!diner(rules, philo, philo->id, philo->id + 1))
+			if (!pthread_run2(rules, philo))
 				return (0);
-		}
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 17:58:42 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 05:06:12 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/20 17:16:50 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_data
 	unsigned int		time_die;
 	int					dead;
 	int					nb_dead;
+	int					count;
 	long long			time_start;
 	long long			*forks;
 	pthread_mutex_t		*fork;
@@ -53,10 +54,12 @@ int			pthread_run(t_data *rules, t_philosopher *philo, unsigned int i);
 void		*pthread_(void *void_philosopher);
 void		exit_launcher(t_data *rules, t_philosopher *philos);
 long long	instant(void);
+long long	instant_micro(void);
 void		print(t_data *rules, int id, char *string);
 long long	time_diff(long long past, long long pres);
 void		smart_sleep(long long time, t_data *rules, t_philosopher *philo);
-int			check_mutex(t_data *ru, t_philosopher *phi, int philo1, int philo2);
+int			time_mutex(t_data *ru, t_philosopher *phi, int philo1, int philo2);
+int			pthread_run2(t_data *rules, t_philosopher *philo);
 int			ft_isdigit(unsigned char c);
 int			ft_atoi(const char *str);
 

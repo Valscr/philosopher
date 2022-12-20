@@ -6,7 +6,7 @@
 #    By: valentin <valentin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/15 17:29:07 by valentin          #+#    #+#              #
-#    Updated: 2022/12/19 04:48:04 by valentin         ###   ########.fr        #
+#    Updated: 2022/12/20 17:17:25 by valentin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = philo
 COLOUR_GREEN=\033[0;32m
 COLOUR_END=\033[0m
 
-C_FILES = philo.c init.c thread.c utils.c utils2.c check_mutex.c
+C_FILES = philo.c init.c thread.c utils.c utils2.c time_mutex.c
 
 SRC_DIR = ./src/
 

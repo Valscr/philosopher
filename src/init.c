@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 02:15:43 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/19 04:08:01 by valentin         ###   ########.fr       */
+/*   Updated: 2022/12/20 16:52:04 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	init_bis(t_data *data, char **argv, int argc)
 		data->philosophers[i].last_eat = instant();
 		data->philosophers[i].mutex_autorise = 0;
 		if (argc == 5)
-			data->philosophers[i].nb_eat = 100000;
+			data->philosophers[i].nb_eat = 0;
 		else
 			data->philosophers[i].nb_eat = ft_atoi(argv[5]);
 	}
@@ -57,6 +57,8 @@ int	init(t_data *data, char **argv, int argc)
 	data->fork = malloc(sizeof(pthread_mutex_t) * (ft_atoi(argv[1]) + 2));
 	if (!data->fork)
 		return (0);
+	if (argc == 6)
+		data->count = 1;
 	data->dead = 0;
 	data->nb_dead = 0;
 	data->time_start = instant();
