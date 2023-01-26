@@ -6,7 +6,7 @@
 /*   By: valentin <valentin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 02:15:43 by valentin          #+#    #+#             */
-/*   Updated: 2022/12/20 16:52:04 by valentin         ###   ########.fr       */
+/*   Updated: 2023/01/27 00:11:45 by valentin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	init(t_data *data, char **argv, int argc)
 		return (0);
 	if (argc == 6)
 		data->count = 1;
+	else
+		data->count = 0;
 	data->dead = 0;
 	data->nb_dead = 0;
 	data->time_start = instant();
